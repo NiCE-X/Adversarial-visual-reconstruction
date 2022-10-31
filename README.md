@@ -29,7 +29,7 @@ $ bash download.sh pretrained-celeba-128x128
 
 ## Datasets
 
-Download the CelebA-hq dataset.
+Follow [CelebAMask-HQ](https://github.com/switchablenorms/CelebAMask-HQ) to download the dataset and specify the path in invert.py.
 
 ## Usage
 <p align="justify"> Simply run the following command
