@@ -38,9 +38,9 @@ def parse_args():
                       help='Image size for visualization. (default: 256)')
   parser.add_argument('--gpu_id', type=str, default='0',
                       help='Which GPU(s) to use. (default: `0`)')
-  parser.add_argument('--celeba_image_dir', type=str, default="/hd6/guanweinan/Data/CelebAMask_HQ/CelebAMask-HQ/CelebA-HQ-img/",
+  parser.add_argument('--celeba_image_dir', type=str, default="input celeba-hq dataset path here",
                       help='path for celeb data')
-  parser.add_argument('--attr_path', type=str, default="/hd6/guanweinan/Data/CelebAMask_HQ/CelebAMask-HQ/CelebAMask-HQ-attribute-anno.txt",
+  parser.add_argument('--attr_path', type=str, default="input celeba-hq attribute annatations txt here",
                       help='path for celeb anno')
   parser.add_argument('--selected_attrs', '--list', nargs='+', help='selected attributes for the CelebA dataset',
                         default=['Black_Hair', 'Blond_Hair', 'Brown_Hair', 'Male', 'Young'])
