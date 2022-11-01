@@ -207,14 +207,34 @@ class StyleGANInverter(object):
         loss_feat = torch.mean((x_feat - x_rec_feat) ** 2)
         loss = loss + loss_feat * self.loss_feat_weight
         log_message += f', loss_feat: {_get_tensor_value(loss_feat):.3f}'
-
-      # Regularization loss.
-      if self.loss_reg_weight:
-        z_rec = self.E.net(x_rec).view(1, *self.encode_dim)
-        loss_reg = torch.mean((z - z_rec) ** 2)
-        loss = loss + loss_reg * self.loss_reg_weight
-        log_message += f', loss_reg: {_get_tensor_value(loss_reg):.3f}'
+        
+      # Do optimization.
+      optimizer.zero_grad()
+      loss.backward()
+      optimizer.step()
       
+    temp_z = z.detach().clone()
+    pbar = tqdm(range(1, self.iteration + 1), leave=True)
+    epsilon = 0.05
+    for step in pbar:
+      loss = 0.0
+
+      # Reconstruction loss.
+      add = torch.clamp(z-temp_z, -epsilon, epsilon)
+      z_add = temp_z + add
+      x_rec = self.G.net.synthesis(z_add)
+      loss_pix = torch.mean((x - x_rec) ** 2)
+      loss = loss + loss_pix * self.loss_pix_weight
+      log_message = f'loss_pix: {_get_tensor_value(loss_pix):.3f}'
+
+      # Perceptual loss.
+      if self.loss_feat_weight:
+        x_feat = self.F.net(x)
+        x_rec_feat = self.F.net(x_rec)
+        loss_feat = torch.mean((x_feat - x_rec_feat) ** 2)
+        loss = loss + loss_feat * self.loss_feat_weight
+        log_message += f', loss_feat: {_get_tensor_value(loss_feat):.3f}'
+        
       # adversarial loss 
       out_recs = []
       out_oris = []
